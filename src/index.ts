@@ -1,14 +1,21 @@
 type DefinitionArray = string[];
+type Str = string;
+
+type MeaningStructure = {
+  difinition: DefinitionArray;
+  partOfSpeech: string;
+  synonyms: DefinitionArray;
+  antonyms?: DefinitionArray;
+};
 
 interface Meaning {
-  noun: {
-    difinition: DefinitionArray;
-    partOfSpeech: string;
-    synonyms: DefinitionArray;
-    antonyms?: DefinitionArray;
-  };
+  noun: MeaningStructure;
 }
-const arr: Meaning[] = [];
+
+interface VerbMeaning {
+  verb: MeaningStructure;
+}
+const arr: any[] = [];
 
 async function getTransilation<T = any>(word: string): Promise<T> {
   const transilationResponse = await fetch(
@@ -25,6 +32,8 @@ formElement?.addEventListener("submit", async (e) => {
   const textElement = formElement.querySelector("input");
   const meaningData = await getTransilation(textElement?.value as string);
   const nounMeaning: Meaning = { noun: meaningData[0].meanings[0] };
-  arr.push(nounMeaning);
-  console.log(meaningData[0].phonetics);
+  const verbMeaning: VerbMeaning = { verb: meaningData[0].meanings[1] };
+  arr.push(nounMeaning, verbMeaning);
+  let audio: Str = meaningData[0].phonetics[0].audio;
+  let srcs = meaningData[0].sourceUrls[0];
 });
