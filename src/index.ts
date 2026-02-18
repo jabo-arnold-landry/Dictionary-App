@@ -2,7 +2,7 @@ type DefinitionArray = string[];
 type Str = string;
 
 interface MeaningStructure {
-  difinition: DefinitionArray;
+  definitions: Record<string, unknown>[];
   partOfSpeech: Str;
   synonyms: DefinitionArray;
   antonyms?: DefinitionArray;
@@ -26,14 +26,34 @@ formElement?.addEventListener("submit", async (e) => {
   const verbMeaning: MeaningStructure = meaningData[0].meanings[1];
   let audio: Str = meaningData[0].phonetics[0].audio;
   let srcs = meaningData[0].sourceUrls[0];
+  nounPopulation(nounMeaning, "noun-section");
+  nounPopulation(verbMeaning, "verb-section");
 });
+
 type PickOne = Pick<
   MeaningStructure,
-  "difinition" | "partOfSpeech" | "synonyms"
+  "definitions" | "partOfSpeech" | "synonyms"
 >;
 
 function nounPopulation(obj: PickOne, className: string): void {
-  const sectionToGet = document.querySelector(`.${className}`);
-  const { difinition, partOfSpeech, synonyms } = obj;
-  console.log(obj);
+  const sectionToGet = document.querySelector(`.${className}`) as HTMLElement;
+
+  sectionToGet.innerHTML = ``;
+  const { definitions, partOfSpeech, synonyms } = obj;
+
+  const explanations = definitions
+    .slice(0, 3)
+    .map((element) => `<li>${element.definition}</li>`)
+    .join("");
+
+  sectionToGet.innerHTML = `
+                                              <h2>${partOfSpeech}</h2>
+                                              <div>
+                                                <p>meaning</p>
+                                                <ul>
+                                                ${explanations}
+                                                </ul>
+                                                 <p>synoms <span>${synonyms[0] || "no synoms"}</span></p>
+                                              </div>
+                                              `;
 }
