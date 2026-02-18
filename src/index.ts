@@ -1,24 +1,30 @@
 type DefinitionArray = string[];
 
 interface Meaning {
-  difinition: DefinitionArray;
-  partOfSpeech: string;
-  synonyms: DefinitionArray;
+  noun: {
+    difinition: DefinitionArray;
+    partOfSpeech: string;
+    synonyms: DefinitionArray;
+    antonyms?: DefinitionArray;
+  };
 }
-
-interface VerbOrNoun {
-  certainType: Meaning;
-}
-
-type DictionaryFilteredData = VerbOrNoun[];
+const arr: Meaning[] = [];
 
 async function getTransilation<T = any>(word: string): Promise<T> {
   const transilationResponse = await fetch(
     `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
   );
   const transilationedTextData = await transilationResponse.json();
-  console.log(transilationedTextData);
   return transilationedTextData as T;
 }
 
-getTransilation("keyboard");
+const formElement = document.querySelector("form");
+
+formElement?.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const textElement = formElement.querySelector("input");
+  const meaningData = await getTransilation(textElement?.value as string);
+  const nounMeaning: Meaning = { noun: meaningData[0].meanings[0] };
+  arr.push(nounMeaning);
+  console.log(meaningData[0].phonetics);
+});
