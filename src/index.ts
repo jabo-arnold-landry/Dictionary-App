@@ -53,7 +53,7 @@ function nounPopulation(obj: PickOne, className: string): void {
                                                 <ul>
                                                 ${explanations}
                                                 </ul>
-                                                 <p>synoms <span>${synonyms[0] || "no synoms"}</span></p>
+                                                 <p>synoms <span>${synonyms.join(",") || "no synoms"}</span></p>
                                               </div>
                                               `;
 }
