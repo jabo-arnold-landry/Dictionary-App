@@ -15,8 +15,10 @@ async function getTransilation<T = any>(word: Str): Promise<T> {
   const transilationedTextData = await transilationResponse.json();
   return transilationedTextData as T;
 }
-
+// DOM element declaration
 const formElement = document.querySelector("form");
+const wordElement = document.querySelector("h1") as HTMLHeadingElement;
+const phonetic = document.querySelector(".abbr") as HTMLParagraphElement;
 
 formElement?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -28,6 +30,8 @@ formElement?.addEventListener("submit", async (e) => {
   let srcs = meaningData[0].sourceUrls[0];
   nounPopulation(nounMeaning, "noun-section");
   nounPopulation(verbMeaning, "verb-section");
+  wordElement.textContent = meaningData[0].word;
+  phonetic.textContent = meaningData[0].phonetic;
 });
 
 type PickOne = Pick<
