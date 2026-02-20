@@ -19,6 +19,15 @@ async function getTransilation<T = any>(word: Str): Promise<T> {
 const formElement = document.querySelector("form");
 const wordElement = document.querySelector("h1") as HTMLHeadingElement;
 const phonetic = document.querySelector(".abbr") as HTMLParagraphElement;
+const soundElement = document.querySelector("audio") as HTMLAudioElement;
+const audioPlayerBtn = document.getElementById("play-audio");
+
+function playSound(src: Str): void {
+  audioPlayerBtn?.addEventListener("click", () => {
+    soundElement.src = src;
+    soundElement.play();
+  });
+}
 
 formElement?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -26,7 +35,11 @@ formElement?.addEventListener("submit", async (e) => {
   const meaningData = await getTransilation(textElement?.value as Str);
   const nounMeaning: MeaningStructure = meaningData[0].meanings[0];
   const verbMeaning: MeaningStructure = meaningData[0].meanings[1];
-  let audio: Str = meaningData[0].phonetics[0].audio;
+  let audio: Str =
+    meaningData[0].phonetics[0].audio || meaningData[0].phonetics[1].audio;
+
+  playSound(audio);
+
   let srcs = meaningData[0].sourceUrls[0];
   nounPopulation(nounMeaning, "noun-section");
   nounPopulation(verbMeaning, "verb-section");
