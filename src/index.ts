@@ -29,22 +29,38 @@ function playSound(src: Str): void {
   });
 }
 
+function catchErrors<T>(
+  promise: Promise<T>,
+): Promise<[undefined, T] | [Error]> {
+  return promise
+    .then((meaningData) => [undefined, meaningData] as [undefined, T])
+    .catch((err) => [err]);
+}
+
 formElement?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const textElement = formElement.querySelector("input");
-  const meaningData = await getTransilation(textElement?.value as Str);
-  const nounMeaning: MeaningStructure = meaningData[0].meanings[0];
-  const verbMeaning: MeaningStructure = meaningData[0].meanings[1];
-  let audio: Str =
-    meaningData[0].phonetics[0].audio || meaningData[0].phonetics[1].audio;
+  const [err, meaningData] = await catchErrors(
+    getTransilation(textElement?.value as Str),
+  );
+  
+  if (err) {
+    alert(err.message);
+  } else {
+    const nounMeaning: MeaningStructure = meaningData[0].meanings[0];
+    const verbMeaning: MeaningStructure = meaningData[0].meanings[1];
+    let audio: Str =
+      meaningData[0].phonetics[0].audio || meaningData[0].phonetics[1].audio;
 
-  playSound(audio);
+    playSound(audio);
 
-  let srcs = meaningData[0].sourceUrls[0];
-  nounPopulation(nounMeaning, "noun-section");
-  nounPopulation(verbMeaning, "verb-section");
-  wordElement.textContent = meaningData[0].word;
-  phonetic.textContent = meaningData[0].phonetic;
+    let srcs = meaningData[0].sourceUrls[0];
+    nounPopulation(nounMeaning, "noun-section");
+    nounPopulation(verbMeaning, "verb-section");
+    wordElement.textContent = meaningData[0].word;
+    phonetic.textContent = meaningData[0].phonetic;
+  }
+
 });
 
 type PickOne = Pick<
