@@ -8,13 +8,41 @@ interface MeaningStructure {
   antonyms?: DefinitionArray;
 }
 
-async function getTransilation<T = any>(word: Str): Promise<T> {
-  const transilationResponse = await fetch(
-    `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
-  );
-  const transilationedTextData = await transilationResponse.json();
-  return transilationedTextData as T;
+function handlingError(status: number): void {
+  switch (status) {
+    case 404:
+      throw new Error("not found");
+    case 500:
+      throw new Error(
+        "something bad happened with our servers please try again later",
+      );
+    default:
+      throw new Error(
+        "something bad happened check you're internet and try again",
+      );
+  }
 }
+
+async function getTransilation<T = any>(word: Str): Promise<any> {
+  try {
+    const transilationResponse = await fetch(
+      `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
+    );
+
+    if (!transilationResponse.ok) {
+      handlingError(transilationResponse.status);
+    }
+
+    const transilationedTextData = await transilationResponse.json();
+    return transilationedTextData as T;
+  } catch (err) {
+    if (err instanceof Error) {
+      alert(`${err.name}: ${err.message}`);
+      return err.message;
+    }
+  }
+}
+
 // DOM element declaration
 const formElement = document.querySelector("form");
 const wordElement = document.querySelector("h1") as HTMLHeadingElement;
@@ -33,6 +61,13 @@ formElement?.addEventListener("submit", async (e) => {
   e.preventDefault();
   const textElement = formElement.querySelector("input");
   const meaningData = await getTransilation(textElement?.value as Str);
+
+  if (typeof meaningData === "string") {
+    document.body.innerHTML = "";
+    document.body.append(meaningData);
+    return;
+  }
+
   const nounMeaning: MeaningStructure = meaningData[0].meanings[0];
   const verbMeaning: MeaningStructure = meaningData[0].meanings[1];
   let audio: Str =
