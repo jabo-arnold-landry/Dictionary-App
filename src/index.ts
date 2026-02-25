@@ -57,9 +57,7 @@ async function getTransilation<T = any>(word: Str): Promise<any> {
     return transilationedTextData as T;
   } catch (err) {
     if (err instanceof Error) {
-      alert(`${err.name}: ${err.message}`);
-      // document.body.innerHTML = "";
-      // document.body.append(err.message);
+      alert(`Error: ${err.message}`);
       return err.message;
     }
   }
