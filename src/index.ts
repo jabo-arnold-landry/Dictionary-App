@@ -1,3 +1,15 @@
+// DOM element declaration
+const formElement = document.querySelector("form");
+const wordElement = document.querySelector("h1") as HTMLHeadingElement;
+const phonetic = document.querySelector(".abbr") as HTMLParagraphElement;
+const soundElement = document.querySelector("audio") as HTMLAudioElement;
+const audioPlayerBtn = document.getElementById("play-audio");
+const mainSection = document.getElementById("main-section") as HTMLDivElement;
+const notFoundPragraph = document.getElementById(
+  "not-found",
+) as HTMLParagraphElement;
+const reconnectionBtn = document.getElementById("err-btn") as HTMLButtonElement;
+
 type DefinitionArray = string[];
 type Str = string;
 
@@ -8,15 +20,23 @@ interface MeaningStructure {
   antonyms?: DefinitionArray;
 }
 
+function modifyingDOM(element: HTMLElement): void {
+  mainSection.classList.toggle("hide-show");
+  element.textContent = "notfound";
+}
+
 function handlingError(status: number): void {
   switch (status) {
     case 404:
+      modifyingDOM(notFoundPragraph);
       throw new Error("not found");
     case 500:
+      modifyingDOM(reconnectionBtn);
       throw new Error(
         "something bad happened with our servers please try again later",
       );
     default:
+      modifyingDOM(reconnectionBtn);
       throw new Error(
         "something bad happened check you're internet and try again",
       );
@@ -38,17 +58,12 @@ async function getTransilation<T = any>(word: Str): Promise<any> {
   } catch (err) {
     if (err instanceof Error) {
       alert(`${err.name}: ${err.message}`);
+      // document.body.innerHTML = "";
+      // document.body.append(err.message);
       return err.message;
     }
   }
 }
-
-// DOM element declaration
-const formElement = document.querySelector("form");
-const wordElement = document.querySelector("h1") as HTMLHeadingElement;
-const phonetic = document.querySelector(".abbr") as HTMLParagraphElement;
-const soundElement = document.querySelector("audio") as HTMLAudioElement;
-const audioPlayerBtn = document.getElementById("play-audio");
 
 function playSound(src: Str): void {
   audioPlayerBtn?.addEventListener("click", () => {
@@ -62,11 +77,7 @@ formElement?.addEventListener("submit", async (e) => {
   const textElement = formElement.querySelector("input");
   const meaningData = await getTransilation(textElement?.value as Str);
 
-  if (typeof meaningData === "string") {
-    document.body.innerHTML = "";
-    document.body.append(meaningData);
-    return;
-  }
+  if (typeof meaningData === "string") return;
 
   const nounMeaning: MeaningStructure = meaningData[0].meanings[0];
   const verbMeaning: MeaningStructure = meaningData[0].meanings[1];
@@ -78,6 +89,8 @@ formElement?.addEventListener("submit", async (e) => {
   let srcs = meaningData[0].sourceUrls[0];
   nounPopulation(nounMeaning, "noun-section");
   nounPopulation(verbMeaning, "verb-section");
+  mainSection.classList.remove("hide-show");
+
   wordElement.textContent = meaningData[0].word;
   phonetic.textContent = meaningData[0].phonetic;
 });
@@ -90,7 +103,9 @@ type PickOne = Pick<
 function nounPopulation(obj: PickOne, className: string): void {
   const sectionToGet = document.querySelector(`.${className}`) as HTMLElement;
 
-  sectionToGet.innerHTML = ``;
+  sectionToGet.innerHTML = " ";
+  notFoundPragraph.textContent = "";
+  reconnectionBtn.style.display = "none";
   const { definitions, partOfSpeech, synonyms } = obj;
 
   const explanations = definitions
