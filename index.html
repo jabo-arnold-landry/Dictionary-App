@@ -3,6 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/src/style.css" />
+
     <title>Dictionary Practice</title>
   </head>
   <body>
@@ -18,42 +20,49 @@
           <button>🔍</button>
         </div>
       </form>
-      <section>
-        <div class="sound-section">
-          <audio src=""></audio>
-          <button>▶️</button>
-        </div>
+      <div id="main-section">
+        <section>
+          <div class="sound-section">
+            <audio src=""></audio>
+            <button>▶️</button>
+          </div>
 
-        <div class="phrasing-section">
-          <h1 class="phrase">phrase</h1>
-          <p class="abbr">Abbr</p>
-        </div>
-      </section>
-      <section class="noun-section">
-        <h2>noun</h2>
-        <div class="description">
-          <p>meaning</p>
-          <ul>
-            <li>meaning one</li>
-            <li>meaning two</li>
-            <li>meaning three</li>
-          </ul>
-          <p>synoms <span>electronic thing</span></p>
-        </div>
-      </section>
-      <section class="verb-section">
-        <h2>verb</h2>
-        <div class="description">
-          <p>meaning</p>
-          <ul>
-            <li>meaning one</li>
-            <li>meaning two</li>
-            <li>meaning three</li>
-          </ul>
-          <p>synoms <span>electronic thing</span></p>
-          <a href="">sources</a>
-        </div>
-      </section>
+          <div class="phrasing-section">
+            <h1 class="phrase">phrase</h1>
+            <p class="abbr">Abbr</p>
+          </div>
+        </section>
+
+        <section class="noun-section">
+          <h2>noun</h2>
+          <div class="description">
+            <p>meaning</p>
+            <ul>
+              <li>meaning one</li>
+              <li>meaning two</li>
+              <li>meaning three</li>
+            </ul>
+            <p>synoms <span>electronic thing</span></p>
+          </div>
+        </section>
+
+        <section class="verb-section">
+          <h2>verb</h2>
+          <div class="description">
+            <p>meaning</p>
+            <ul>
+              <li>meaning one</li>
+              <li>meaning two</li>
+              <li>meaning three</li>
+            </ul>
+            <p>synoms <span>electronic thing</span></p>
+            <a href="">sources</a>
+          </div>
+        </section>
+      </div>
+
+      <p id="not-found"></p>
+      <button id="err-btn">Reload</button>
     </main>
     <script src="/dist/index.js"></script>
   </body>
