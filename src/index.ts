@@ -20,23 +20,23 @@ interface MeaningStructure {
   antonyms?: DefinitionArray;
 }
 
-function modifyingDOM(element: HTMLElement): void {
+function modifyingDOM(element: HTMLElement, error: string): void {
   mainSection.classList.toggle("hide-show");
-  element.textContent = "notfound";
+  element.textContent = error;
 }
 
 function handlingError(status: number): void {
   switch (status) {
     case 404:
-      modifyingDOM(notFoundPragraph);
+      modifyingDOM(notFoundPragraph, "not found");
       throw new Error("not found");
     case 500:
-      modifyingDOM(reconnectionBtn);
+      modifyingDOM(reconnectionBtn, "retry");
       throw new Error(
         "something bad happened with our servers please try again later",
       );
     default:
-      modifyingDOM(reconnectionBtn);
+      modifyingDOM(reconnectionBtn, "retry");
       throw new Error(
         "something bad happened check you're internet and try again",
       );
