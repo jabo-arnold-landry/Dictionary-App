@@ -9,3 +9,8 @@
 .hide-show {
   display: none;
 }
+
+ul {
+  height: 100px;
+  overflow-y: auto;
+}
