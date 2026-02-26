@@ -23,6 +23,7 @@ interface MeaningStructure {
 function modifyingDOM(element: HTMLElement, error: string): void {
   mainSection.classList.toggle("hide-show");
   element.textContent = error;
+  element.style.display = "block";
 }
 
 function handlingError(status: number): void {
@@ -44,6 +45,7 @@ function handlingError(status: number): void {
 }
 
 async function getTransilation<T = any>(word: Str): Promise<any> {
+  if (!navigator.onLine) modifyingDOM(reconnectionBtn, "retry");
   try {
     const transilationResponse = await fetch(
       `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`,
