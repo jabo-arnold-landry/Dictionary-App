@@ -109,7 +109,6 @@ function nounPopulation(obj: PickOne, className: string): void {
   const { definitions, partOfSpeech, synonyms } = obj;
 
   const explanations = definitions
-    .slice(0, 3)
     .map((element) => `<li>${element.definition}</li>`)
     .join("");
 
