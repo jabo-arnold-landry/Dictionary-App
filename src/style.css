@@ -11,8 +11,8 @@
 }
 
 ul {
-  height: 100px;
-  overflow-y: auto;
+  height: 80px;
+  overflow: auto;
   scrollbar-color: purple white;
 }
 
