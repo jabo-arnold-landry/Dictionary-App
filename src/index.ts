@@ -21,7 +21,7 @@ interface MeaningStructure {
 }
 
 function modifyingDOM(element: HTMLElement, error: string): void {
-  mainSection.classList.toggle("hide-show");
+  mainSection.classList.add("hide-show");
   element.textContent = error;
   element.style.display = "block";
 }
@@ -102,10 +102,11 @@ type PickOne = Pick<
 
 function nounPopulation(obj: PickOne, className: string): void {
   const sectionToGet = document.querySelector(`.${className}`) as HTMLElement;
-
+  
   sectionToGet.innerHTML = " ";
   notFoundPragraph.textContent = "";
   reconnectionBtn.style.display = "none";
+
   const { definitions, partOfSpeech, synonyms } = obj;
 
   const explanations = definitions
