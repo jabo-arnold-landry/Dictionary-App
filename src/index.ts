@@ -26,7 +26,7 @@ function modifyingDOM(element: HTMLElement, error: string): void {
   element.style.display = "block";
 }
 
-function handlingError(status: number): void {
+function handlingError(status: number): never {
   switch (status) {
     case 404:
       modifyingDOM(notFoundPragraph, "not found");
